@@ -23,7 +23,7 @@ WHERE continent in (SELECT continent FROM world
 ORDER BY name
 
 Q4.
------------------
+----------------
 SELECT name, population
 FROM world
 WHERE population > (SELECT population FROM world 
@@ -39,6 +39,13 @@ JOIN (SELECT population, continent
       FROM world 
       WHERE name = 'Germany') g
 ON w.continent = g.continent
+
+----------------
+SELECT name, CONCAT(ROUND(population / (SELECT population
+									FROM world
+									WHERE name = 'Germany') * 100), '%')
+FROM world
+WHERE continent = 'Europe'
 
 Q6.
 ----------------
@@ -59,3 +66,27 @@ ON w.area = m.max_area
 
 Q8.
 ----------------
+SELECT continent, a.name
+FROM world a
+WHERE a.name <= ALL(SELECT name
+                    FROM world b
+                    WHERE a.continent = b.continent)
+
+Q9.
+----------------
+SELECT a.name, a.continent, a.population
+FROM world a
+JOIN (SELECT MAX(population) AS max_pop, continent
+      FROM world
+      GROUP BY continent) b
+ON a.continent = b.continent
+WHERE b.max_pop <= 25000000
+
+Q10.
+----------------
+SELECT name,continent
+FROM world a
+WHERE population > ALL(SELECT population * 3
+					FROM world b
+					WHERE a.continent = b.continent and a.name != b.name)
+
