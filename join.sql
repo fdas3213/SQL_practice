@@ -74,3 +74,11 @@ FROM game JOIN goal
 ON game.id = goal.matchid
 WHERE game.team1 = 'POL' OR game.team2 = 'POL'
 GROUP BY goal.matchid
+
+Q12.
+-------------------
+SELECT goal.matchid, MIN(game.mdate), COUNT(goal.player)
+FROM game JOIN goal
+ON game.id = goal.matchid
+GROUP BY goal.teamid, goal.matchid
+HAVING goal.teamid = 'GER'
