@@ -82,3 +82,11 @@ FROM game JOIN goal
 ON game.id = goal.matchid
 GROUP BY goal.teamid, goal.matchid
 HAVING goal.teamid = 'GER'
+
+Q13.
+-------------------
+SELECT MIN(game.mdate), MIN(game.team1), SUM(CASE WHEN goal.teamid = game.team1 THEN 1 Else 0 END) AS score1, MIN(game.team2), 
+SUM(CASE WHEN goal.teamid = game.team2 THEN 1 ELSE 0 END) AS score2 
+FROM game LEFT JOIN goal ON (game.id = goal.matchid)
+GROUP BY game.id
+ORDER BY game.mdate, goal.matchid, game.team1, game.team2
