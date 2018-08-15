@@ -129,3 +129,10 @@ WHERE casting.movieid IN
 		ON movie.id = casting.movieid
 		JOIN actor ON actor.id = casting.actorid
 		WHERE actor.name = 'Art Garfunkel') AND actor.name != 'Art Garfunkel'
+		
+-- added another correct query
+SELECT DISTINCT name
+FROM actor JOIN casting ON id=actorid
+WHERE movieid IN (SELECT movieid FROM casting JOIN actor ON (actorid=id AND name='Art Garfunkel')) AND name != 'Art Garfunkel'
+GROUP BY name
+GROUP BY actor.name
