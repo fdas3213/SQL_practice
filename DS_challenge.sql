@@ -17,3 +17,25 @@ FROM (
 	SELECT *, ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY date) AS tenth_date 
 	FROM data) d
 WHERE tenth_date = 10 
+
+
+P4 a.
+-----------------------
+SELECT user_id, SUM(transaction_amount) as total
+FROM (SELECT * FROM data_march 
+			UNION ALL
+			SELECT * FROM data_april) data
+GROUP BY user_id
+ORDER BY user_id
+
+P4 b.
+---------------------
+SELECT user_id, date, SUM(total_amount) OVER (PARTITION BY user_id ORDER BY date) AS cumsum
+FROM (SELECT user_id, date, SUM(transaction_amount) as total_amount
+			FROM data_march
+			GROUP BY user_id, date
+			UNION ALL
+			SELECT user_id,date,SUM(transaction_amount) as total_amount
+			 FROM data_april
+			 GROUP BY user_id, date) data
+ORDER BY user_id, date
