@@ -61,8 +61,3 @@ SELECT user_id, country, created_at
 	  	ROW_NUMBER() OVER(PARTITION BY country ORDER BY created_at) AS country_time_asc
 	FROM data) tmp
 WHERE country_time_desc = 1 or country_time_asc = 1
-
-
-
-
-data: user_id, created_at, country
