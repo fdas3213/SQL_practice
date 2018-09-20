@@ -39,3 +39,30 @@ FROM (SELECT user_id, date, SUM(transaction_amount) as total_amount
 			 FROM data_april
 			 GROUP BY user_id, date) data
 ORDER BY user_id, date
+
+
+P6 a.
+--------------------
+SELECT country, user_count
+	(SELECT *, ROW_NUMBER() OVER(ORDER BY user_count) AS count_up,
+				ROW_NUMBER() OVER (ORDER BY user_count DESC) AS count_down
+				FROM 
+			(SELECT country, COUNT(DISTINCT user_id) as user_count
+			FROM data
+			GROUP BY country) a 
+		) tmp
+WHERE count_up = 1 or count_down = 1
+
+P6 b.
+---------------------
+SELECT user_id, country, created_at
+	(SELECT *
+		  ROW_NUMBER() OVER(PARTITION BY country ORDER BY created_at DESC) AS country_time_desc,
+	  	ROW_NUMBER() OVER(PARTITION BY country ORDER BY created_at) AS country_time_asc
+	FROM data) tmp
+WHERE country_time_desc = 1 or country_time_asc = 1
+
+
+
+
+data: user_id, created_at, country
