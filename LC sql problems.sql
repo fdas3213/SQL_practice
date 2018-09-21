@@ -67,3 +67,28 @@ FROM
     FROM Employee e JOIN Department d
     ON e.DepartmentId = d.Id) tmp
 WHERE dep_rank = 1 or dep_rank = 2 or dep_rank = 3
+
+P197
+------------------
+SELECT w1.Id
+FROM Weather w1  JOIN Weather w2 
+ON DATEDIFF(w1.RecordDate, w2.RecordDate) = 1
+WHERE w1.Temperature > w2.Temperature
+
+
+P262
+-----------------
+SELECT tmp.Request_at AS Day ,  ROUND(SUM(tmp.cancel)/(0.0 +COUNT(tmp.Client_id)), 2)  AS 'Cancellation Rate'
+FROM (SELECT *, CASE WHEN t.Status = 'completed' THEN 0 ELSE 1 END AS cancel 
+			FROM Trips t JOIN Users u
+			ON t.Client_Id = u.Users_id
+			WHERE u.Banned = 'No' AND t.Request_at >= '2013-10-01' AND t.Request_at <= '2013-10-03') tmp
+GROUP BY tmp.Request_at
+
+
+P595
+-----------------
+SELECT name, population, area
+FROM World
+WHERE population > 25000000 OR area > 3000000
+
