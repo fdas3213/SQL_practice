@@ -92,3 +92,17 @@ SELECT name, population, area
 FROM World
 WHERE population > 25000000 OR area > 3000000
 
+
+P601
+-----------------
+SELECT a.id, a.date, a.people
+FROM stadium a, stadium b, stadium c
+WHERE DATEDIFF(a.date, b.date) = 1 AND DATEDIFF(b.date,c.date) = 1 AND a.people >= 100 AND b.people >= 100 AND c.people >=100
+
+
+P626
+-----------------
+SELECT id, CASE WHEN id%2=0 THEN (SELECT student FROM seat WHERE id=s.id-1)
+	        WHEN id%2!= 0 AND id<(SELECT COUNT(*) FROM seat) THEN (SELECT student FROM seat WHERE id=s.id+1)
+		ELSE student END AS student
+FROM seat s
