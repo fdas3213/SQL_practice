@@ -83,8 +83,16 @@ ON game.id = goal.matchid
 GROUP BY goal.teamid, goal.matchid
 HAVING goal.teamid = 'GER'
 
+
+SELECT matchid, mdate, COUNT(*) AS num_goals
+FROM game JOIN goal
+ON game.id = goal.matchid
+WHERE (team1 = 'GER' AND teamid = 'GER') OR (team2 = 'GER' AND teamid = 'GER')
+GROUP BY 1,2
+
 Q13.
 -------------------
+-- using a left join here because maybe there is one match that has no goals, so that there is no record in the 'goal' table
 SELECT MIN(game.mdate), MIN(game.team1), SUM(CASE WHEN goal.teamid = game.team1 THEN 1 Else 0 END) AS score1, MIN(game.team2), 
 SUM(CASE WHEN goal.teamid = game.team2 THEN 1 ELSE 0 END) AS score2 
 FROM game LEFT JOIN goal ON (game.id = goal.matchid)
